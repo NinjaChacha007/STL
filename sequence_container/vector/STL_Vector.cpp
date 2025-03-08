@@ -24,18 +24,18 @@ ostream& operator<<(ostream& cout, const Person& person) {
     return cout;
 }
 
-void display(const vector<int>& vec) {
-    cout<<"[";
-    for_each(vec.begin(), vec.end(), [](const int i){ cout<<i<<" ";});
-    cout<<"]"<<endl;
-}
-
 template<typename T>
 void display1(const vector<T>& vec) {
   cout<<"[";
   for(const auto& i:vec)
       cout<<i<<" ";
   cout<<"]"<<endl;
+}
+
+void display2(const vector<int>& vec) {
+    cout<<"[";
+    for_each(vec.begin(), vec.end(), [](const int i){ cout<<i<<" ";});
+    cout<<"]"<<endl;
 }
 
 void display3(const vector<pair<int,string>>& vec)
@@ -48,13 +48,14 @@ void display3(const vector<pair<int,string>>& vec)
 
 void test0()
 {
+    cout<<"===== test0 =====";
     const vector<int> vec1{1,2,3,4,5};
     const vector<int> vec2={10,20,30,40,50};
     vector<int> vec3;
     vec3={100,200,300,400,500};
     cout<<"vec1: "; display1(vec1);
-    cout<<"vec2: "; display(vec2);
-    cout<<"vec3: "; display(vec3);
+    cout<<"vec2: "; display2(vec2);
+    cout<<"vec3: "; display2(vec3);
     try
     {
         //vec1.at(10);
@@ -83,42 +84,47 @@ void test0()
 void test1() {
     cout<<"===== test1 ====="<<endl;
   vector<int> vec{1,2,3,4,5};
-  cout<<"vec: "; display(vec);
+  cout<<"vec: "; display2(vec);
   cout<<"vec.size(): "<<vec.size()<<endl;
   cout<<"vec.capacity(): "<<vec.capacity()<<endl;
   cout<<"vec.max_size(): "<<vec.max_size()<<endl;
+  cout<<"vec.empty(): "<<vec.empty()<<endl;
   vec.push_back(6);
-  cout<<"\nvec: "; display(vec);
+  cout<<"\nvec: "; display2(vec);
   cout<<"vec.size(): "<<vec.size()<<endl;
   cout<<"vec.capacity(): "<<vec.capacity()<<endl;
   cout<<"vec.max_size(): "<<vec.max_size()<<endl;
+  cout<<"vec.empty(): "<<vec.empty()<<endl;
   vec.shrink_to_fit();
-  cout<<"\nvec: "; display(vec);
+  cout<<"\nvec: "; display2(vec);
   cout<<"vec.size(): "<<vec.size()<<endl;
   cout<<"vec.capacity(): "<<vec.capacity()<<endl;
   cout<<"vec.max_size(): "<<vec.max_size()<<endl;
+  cout<<"vec.empty(): "<<vec.empty()<<endl;
   vec.reserve(100);
-  cout<<"\nvec: "; display(vec);
+  cout<<"\nvec: "; display2(vec);
   cout<<"vec.size(): "<<vec.size()<<endl;
   cout<<"vec.capacity(): "<<vec.capacity()<<endl;
   cout<<"vec.max_size(): "<<vec.max_size()<<endl;
+  cout<<"vec.empty(): "<<vec.empty()<<endl;
   vec.clear();
-  cout<<"\nvec: "; display(vec);
+  cout<<"\nvec: "; display2(vec);
   cout<<"vec.size(): "<<vec.size()<<endl;
   cout<<"vec.capacity(): "<<vec.capacity()<<endl;
   cout<<"vec.max_size(): "<<vec.max_size()<<endl;
+  cout<<"vec.empty(): "<<vec.empty()<<endl;
 }
 
 void test2()
 {
     cout<<"===== test2 ====="<<endl;
     vector<int> vec{1,2,3,4,5,6,7,8,9,10};
-    cout<<"vec: "; display(vec);
+    cout<<"vec: "; display2(vec);
     cout<<"vec.size(): "<<vec.size()<<endl;
     cout<<"vec.capacity(): "<<vec.capacity()<<endl;
     cout<<"vec.max_size(): "<<vec.max_size()<<endl;
     vec.erase(vec.begin(),vec.begin()+2);
-    cout<<"vec: "; display(vec);
+    cout<<"vec: "; display2(vec);
     cout<<"vec.size(): "<<vec.size()<<endl;
     cout<<"vec.capacity(): "<<vec.capacity()<<endl;
     vec={1,2,3,4,5,6,7,8,9,10};
@@ -130,7 +136,7 @@ void test2()
         else
             ++it;
     }
-    cout<<"vec: "; display(vec);
+    cout<<"vec: "; display2(vec);
 }
 
 void test3()
@@ -158,7 +164,7 @@ void test4()
     vector<int> vec3;
     transform(vec1.begin(),vec1.end(),vec2.begin(),back_inserter(vec3),[](int x,int y){ return x*y;});
     cout<<"After using transform() with 5 parameters: "<<endl;
-    cout<<"vec3: "; display(vec3);
+    cout<<"vec3: "; display2(vec3);
 }
 
 void test5()
@@ -171,6 +177,23 @@ void test5()
     cout<<"sorting based on string: "; display3(vec);
 }
 
+void test6() {
+    cout<<"===== test6 ====="<<endl;
+    vector<int> vec1{100,200,300,400,600};
+    vector<int> vec2{50,40,30,20,10};
+    cout<<"vec1: ";    display1(vec1);
+    cout<<"vec2: ";    display2(vec2);
+    vec1.swap(vec2);
+    cout<<"Swap\nvec1: ";   display2(vec1);
+    cout<<"vec2: ";    display1(vec2);
+    vector<int>::iterator it=find(vec2.begin(),vec2.end(),600);
+    vec2.insert(it,500);
+    cout<<"vec2.insert(): ";    display1(vec2);
+    it=find(vec1.begin(),vec1.end(),50);
+    vec1.insert(it,vec2.rbegin(),vec2.rend());
+    cout<<"vec1.insert(): ";    display2(vec1);
+}
+
 int main(int argc, char const *argv[]) {
     test0();    cout<<endl;
     test1();    cout<<endl;
@@ -178,5 +201,6 @@ int main(int argc, char const *argv[]) {
     test3();    cout<<endl;
     test4();    cout<<endl;
     test5();    cout<<endl;
+    test6();
     return 0;
 }
